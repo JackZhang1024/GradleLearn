@@ -11,5 +11,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.e("info","学习Gradle知识");
+        Log.e("info","学习Pull request知识");
     }
 }
