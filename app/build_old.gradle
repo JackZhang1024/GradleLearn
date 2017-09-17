@@ -98,16 +98,16 @@ android {
 
 
     //第二种多渠道打包方法
-//    productFlavors {
-//        wandoujia{}
-//        xiaomi{}
-//        qq{}
-//        _360 {}
-//    }
-//
-//    productFlavors.all {
-//        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, APP_NAME: name]
-//    }
+    productFlavors {
+        wandoujia{}
+        xiaomi{}
+        qq{}
+        _360 {}
+    }
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, APP_NAME: name]
+    }
 
 
     //第三种多渠道打包方法
@@ -119,20 +119,6 @@ android {
 //            }
 //        }
 //    }
-
-    //根据不同的Flavor和不同的module对App的资源进行替换和逻辑变换
-    productFlavors {
-        oema{
-           buildConfigField("String","OEM", '"OEMA"')
-        }
-        oemb{
-           buildConfigField("String","OEM", '"OEMB"')
-        }
-    }
-
-    productFlavors.all {
-        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, APP_NAME: name]
-    }
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -176,8 +162,4 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile project(':repository:viewpagerindicator')
-    // 将不同的Flavor和不同的module关联起来
-    // 然后就可以利用不同module下的资源进行替换操作
-    oemaCompile project(':oema')
-    oembCompile project(':oemb')
 }
