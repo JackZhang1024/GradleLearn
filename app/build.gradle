@@ -4,16 +4,18 @@ def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
 }
 
+def config=rootProject.ext
+
 android {
-    compileSdkVersion rootProject.ext.appCompileSdkVersion
-    buildToolsVersion rootProject.ext.appBuildToolsVersion
+    compileSdkVersion config.appCompileSdkVersion
+    buildToolsVersion config.appBuildToolsVersion
 
     defaultConfig {
-        applicationId rootProject.ext.appApplicationId
-        minSdkVersion rootProject.ext.appMinSdkVersion
-        targetSdkVersion rootProject.ext.appTargetSdkVersion
-        versionCode rootProject.ext.appVersionCode
-        versionName rootProject.ext.appVersionName
+        applicationId config.appApplicationId
+        minSdkVersion config.appMinSdkVersion
+        targetSdkVersion config.appTargetSdkVersion
+        versionCode config.appVersionCode
+        versionName config.appVersionName
         // dex突破65535的限制
         multiDexEnabled true
         // 默认是umeng的渠道
@@ -96,26 +98,27 @@ android {
 
 
     //第二种多渠道打包方法
-//    productFlavors {
-//        wandoujia{}
-//        xiaomi{}
-//        qq{}
-//        _360 {}
-//    }
-//    productFlavors.all {
-//        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
-//    }
+    productFlavors {
+        wandoujia{}
+        xiaomi{}
+        qq{}
+        _360 {}
+    }
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, APP_NAME: name]
+    }
 
 
     //第三种多渠道打包方法
-    productFlavors {
-        def path="channels.txt"
-        file(path).eachLine { channel ->
-            "$channel"{
-                manifestPlaceholders = [UMENG_CHANNEL_VALUE: channel]
-            }
-        }
-    }
+//    productFlavors {
+//        def path="channels.txt"
+//        file(path).eachLine { channel ->
+//            "$channel"{
+//                manifestPlaceholders = [UMENG_CHANNEL_VALUE: channel, APP_NAME: channel]
+//            }
+//        }
+//    }
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -138,13 +141,13 @@ android {
 
 task printProperties {
     doFirst {
-        println rootProject.ext.appApplicationId
-        println rootProject.ext.appCompileSdkVersion
-        println rootProject.ext.appBuildToolsVersion
-        println rootProject.ext.appMinSdkVersion
-        println rootProject.ext.appTargetSdkVersion
-        println rootProject.ext.appVersionName
-        println rootProject.ext.appVersionCode
+        println config.appApplicationId
+        println config.appCompileSdkVersion
+        println config.appBuildToolsVersion
+        println config.appMinSdkVersion
+        println config.appTargetSdkVersion
+        println config.appVersionName
+        println config.appVersionCode
         println projectFile
         if (project.hasProperty('cmd')) {
             println cmd // Command line property
@@ -157,6 +160,6 @@ task printProperties {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
     compile project(':repository:viewpagerindicator')
 }

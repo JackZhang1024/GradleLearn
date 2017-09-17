@@ -1,1 +1,1 @@
-include ':app', ':repository:viewpagerindicator'
+include ':app', ':repository:viewpagerindicator', ':oema'

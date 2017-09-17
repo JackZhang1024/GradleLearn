@@ -6,3 +6,7 @@
 .DS_Store
 /build
 /captures
+/.idea
+/repository/viewpagerindicator/build/
+/repository/viewpagerindicator/build/generated/source/buildConfig
+/repository/viewpagerindicator/build/generated/source/r
