@@ -1,11 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     repositories {
+        google()
         jcenter()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:3.1.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -14,16 +15,17 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
         jcenter()
     }
 }
 
 ext{
-    appCompileSdkVersion=24
-    appBuildToolsVersion="25.0.0"
+    appCompileSdkVersion=27
+    appBuildToolsVersion="27.0.3"
     appApplicationId="com.aragoncs.gradlelearnTest"
     appMinSdkVersion=15
-    appTargetSdkVersion=24
+    appTargetSdkVersion=27
     appVersionCode=1
     appVersionName="5.2"
 }

@@ -8,14 +8,16 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.aragoncs.gradlelearn.MainActivity">
+    tools:context="com.aragoncs.gradlelearn.MainActivity"
+    android:background="@color/colorPrimaryDark"
+    >
 
-    <TextView
+    <Button
         android:id="@+id/tv_app_flavor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Main"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="30sp"
+        android:text="Apple"
+        android:textColor="@android:color/holo_red_light"
         />
+
 </RelativeLayout>

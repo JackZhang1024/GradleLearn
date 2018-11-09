@@ -1,0 +1,192 @@
+apply plugin: 'com.android.application'
+
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+def config=rootProject.ext
+
+android {
+    compileSdkVersion config.appCompileSdkVersion
+    buildToolsVersion config.appBuildToolsVersion
+
+    defaultConfig {
+        applicationId config.appApplicationId
+        minSdkVersion config.appMinSdkVersion
+        targetSdkVersion config.appTargetSdkVersion
+        versionCode config.appVersionCode
+        versionName config.appVersionName
+        // All flavors must now belong to a named flavor dimension.
+        flavorDimensions "versionCode"
+        // dex突破65535的限制
+        multiDexEnabled true
+        // 默认是umeng的渠道
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE:"umeng"]
+    }
+    //signingConfigs的前后顺序不能乱
+    signingConfigs {
+        staging.initWith(signingConfigs.debug)
+        release {
+            storeFile file("keystore/release.keystore")
+            storePassword "123456"
+            keyAlias "releasepwd"
+            keyPassword "123456"
+        }
+        debug {
+            storeFile file("keystore/debug.keystore")
+            storePassword "123456"
+            keyAlias "debugpwd"
+            keyPassword "123456"
+        }
+    }
+    buildTypes {
+        release {
+            zipAlignEnabled true
+            // 移除无用的resource文件 如果要使用shrinkResources 必须使minifyEnabled为true
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+            buildConfigField "boolean", "DEBUG_ENABLE", 'false'
+            buildConfigField("String", "BASE_URL", '"http://one.netpulse.com"')
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.debug
+            buildConfigField "boolean", "DEBUG_ENABLE", 'true'
+            buildConfigField("String", "BASE_URL", '"http://one.planetfitness.com"')
+        }
+//        stagging{
+//            applicationIdSuffix '.stagging'
+//            versionNameSuffix '-stagging'
+//            buildConfigField "String","BASE_URL",'"http://one.stagging.com"'
+//        }
+//        wandou.initWith(buildTypes.debug)
+//        wandou {
+//            applicationIdSuffix ".wandou"
+//            versionNameSuffix "-wandou"
+//            debuggable = false
+//            buildConfigField("String","BASE_URL",'"http://one.wandou.com"')
+//        }
+    }
+
+      //第一种多渠道打包方法
+//    productFlavors {
+//        blue{
+//            signingConfig signingConfigs.release
+//            applicationId "com.aragoncs.gradlelearnTest.blue"
+//            resValue "color","flavor_color","#ff0000"
+//        }
+//        red{
+//            signingConfig signingConfigs.release
+//            applicationId "com.aragoncs.gradlelearnTest.red"
+//            resValue "color","flavor_color","#00ffff"
+//        }
+//        wandoujia {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+//        }
+//
+//        xiaomi {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+//        }
+//
+//        qq {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qq"]
+//        }
+//
+//        _360 {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "360"]
+//        }
+//    }
+
+
+    //第二种多渠道打包方法
+//    productFlavors {
+//        wandoujia{}
+//        xiaomi{}
+//        qq{}
+//        _360 {}
+//    }
+//
+//    productFlavors.all {
+//        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, APP_NAME: name]
+//    }
+
+
+    //第三种多渠道打包方法
+//    productFlavors {
+//        def path="channels.txt"
+//        file(path).eachLine { channel ->
+//            "$channel"{
+//                manifestPlaceholders = [UMENG_CHANNEL_VALUE: channel, APP_NAME: channel]
+//            }
+//        }
+//    }
+
+    //根据不同的Flavor和不同的module对App的资源进行替换和逻辑变换
+    productFlavors {
+        oema{
+           buildConfigField("String","OEM", '"OEMA"')
+        }
+        oemb{
+           buildConfigField("String","OEM", '"OEMB"')
+        }
+    }
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, APP_NAME: name]
+    }
+
+//
+//    applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            output.outputFile = new File(
+//                    output.outputFile.parent,
+//                    "Aragoncs-${variant.buildType.name}-${releaseTime()}-${defaultConfig.versionName}-${variant.productFlavors[0].name}.apk".toLowerCase())
+//        }
+//    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName =  "Aragoncs-${variant.buildType.name}-${releaseTime()}-${defaultConfig.versionName}-${variant.productFlavors[0].name}.apk"
+        }
+    }
+}
+
+//变体过滤器
+//android.variantFilter { variant ->
+//    if(variant.buildType.name.equals('release')) {
+//        variant.getFlavors().each() { flavor ->
+//            if (flavor.name.equals('blue')) { variant.setIgnore(true);
+//            }
+//        }
+//    }
+//}
+
+task printProperties {
+    doFirst {
+        println config.appApplicationId
+        println config.appCompileSdkVersion
+        println config.appBuildToolsVersion
+        println config.appMinSdkVersion
+        println config.appTargetSdkVersion
+        println config.appVersionName
+        println config.appVersionCode
+        println projectFile
+        if (project.hasProperty('cmd')) {
+            println cmd // Command line property
+        }
+    }
+}
+
+
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile project(':repository:viewpagerindicator')
+    // 将不同的Flavor和不同的module关联起来
+    // 然后就可以利用不同module下的资源进行替换操作
+    oemaCompile project(':oema')
+    oembCompile project(':oemb')
+}

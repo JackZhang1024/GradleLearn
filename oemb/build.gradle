@@ -1,18 +1,20 @@
 apply plugin: 'com.android.library'
 
+def config=rootProject.ext
+
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    compileSdkVersion config.appCompileSdkVersion
+    buildToolsVersion config.appBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion config.appMinSdkVersion
+        targetSdkVersion config.appTargetSdkVersion
+        versionCode config.appVersionCode
+        versionName config.appVersionName
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
+
     buildTypes {
         release {
             minifyEnabled false

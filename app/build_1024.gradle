@@ -4,7 +4,7 @@ def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
 }
 
-def config = rootProject.ext
+def config=rootProject.ext
 
 android {
     compileSdkVersion config.appCompileSdkVersion
@@ -21,18 +21,9 @@ android {
         // dex突破65535的限制
         multiDexEnabled true
         // 默认是umeng的渠道
-        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "umeng"]
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE:"umeng"]
     }
-
-    sourceSets {
-        main {
-            res.srcDirs = ['src/main/res']
-        }
-        apple.res.srcDirs = ['src/main/res-apple']
-        orange.res.srcDirs = ['src/main/res-orange']
-    }
-
-//signingConfigs的前后顺序不能乱
+    //signingConfigs的前后顺序不能乱
     signingConfigs {
         staging.initWith(signingConfigs.debug)
         release {
@@ -66,30 +57,28 @@ android {
         }
     }
 
-//根据不同的Flavor和不同的module对App的资源进行替换和逻辑变换
+    //根据不同的Flavor和不同的module对App的资源进行替换和逻辑变换
     productFlavors {
-        offical{
-
+        oema{
+           buildConfigField("String","OEM", '"OEMA"')
         }
-        apple {
-
-        }
-        orange {
-
+        oemb{
+           buildConfigField("String","OEM", '"OEMB"')
         }
     }
 
-// 根据Flavor设置在清单文件中进行设置
+    // 根据Flavor设置在清单文件中进行设置
     productFlavors.all {
         flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, APP_NAME: name]
     }
 
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "aragoncs-${variant.buildType.name}-${releaseTime()}-${defaultConfig.versionName}-${variant.productFlavors[0].name}.apk"
+            outputFileName =  "aragoncs-${variant.buildType.name}-${releaseTime()}-${defaultConfig.versionName}-${variant.productFlavors[0].name}.apk"
         }
     }
 }
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
