@@ -1,16 +1,16 @@
-# Gradle知识总结
+## Gradle知识总结
 
 ### 1. 什么是Gradle
 
 Gradle是一种项目构建工具，利用它就可以使得具有一定目录结构的项目在它的组织下利用编译器进行编译。
 
-1.  如何安装Gradle
+#### 安装Gradle
 
 ```java
 brew install gradle
 ```
 
-2. 安装完毕后，执行 
+#### 查看Gradle版本
 
 ```linux
 zfz:~ zhangfengzhou$ gradle -v // 查看对应的版本号
@@ -33,14 +33,14 @@ OS:           Mac OS X 10.14.6 x86_64
 
 Gradle 能干什么已经解释了，可以进行项目的构建 那么如何构建项目呢？如何构建一个Java项目呢？
 
-1. 创建目录
+#### 创建目录
 
 ```linux
 zfz:tmp zhangfengzhou$ mkdir java-demo
 ```
 
-2. 切到`wrapper-demo`目录下执行如下命令
-
+#### 创建Java项目
+切到`java-demo`目录下执行如下命令
 ```linux
 zfz:tmp zhangfengzhou$ cd java-demo/
 zfz:java-demo zhangfengzhou$ gradle init --type java-application
@@ -67,8 +67,8 @@ Get more help with your project: https://docs.gradle.org/6.2.1/userguide/tutoria
 BUILD SUCCESSFUL in 21s
 ```
 
-3. 创建项目完成之后，我们查看项目结构
-
+#### 查看Java项目结构
+创建项目完成之后，我们查看项目结构
 ```linux  
 zfz:java-demo zhangfengzhou$ tree .
 .
@@ -118,14 +118,18 @@ public class App {
 }
 ```
 
-4. 查看完项目结构之后我们进行项目编译
+#### 编译Java项目
+
+查看完项目结构之后我们进行项目编译
 
 ```linux
 zfz:java-demo zhangfengzhou$ ./gradlew build
 BUILD SUCCESSFUL in 1s
 ```
 
-5. 查看有哪些任务
+#### 查看项目任务
+
+执行`./gradlew tasks`查看有哪些任务
 
 ```linux
 zfz:java-demo zhangfengzhou$ ./gradlew tasks
@@ -200,7 +204,9 @@ BUILD SUCCESSFUL in 616ms
 1 actionable task: 1 executed
 ```
 
-6. 执行编译任务 `./gradlew run`
+#### 执行任务
+
+执行运行任务 `./gradlew run`
 
 ```linux
 zfz:java-demo zhangfengzhou$ ./gradlew run
@@ -219,7 +225,7 @@ BUILD SUCCESSFUL in 690ms
 
 ### 3. Gradle的基本知识点
 
-1. Gradle 使用的语言
+####  Gradle 使用的语言
 
 Gradle 使用的是一个叫做groovy的语言，可以执行在JVM上，使用和学习Gradle的一大部分在学习Groovy语法上，我们从以下几个方面来学习
 
@@ -229,15 +235,15 @@ Gradle 使用的是一个叫做groovy的语言，可以执行在JVM上，使用�
 
 ![image-20200303111443970](./总结/images/image-20200303111443970.png)
 
-2. 基本语法
+####  基本语法
 
-1. 输出语句
+##### 输出语句
 
 ```kotlin 
 println("Hello") // hello
 ```
 
-2. 列表, 字典
+##### 列表, 字典
 
 ```kotlin 
 list = [1, 2, 3, 4]
@@ -247,7 +253,7 @@ list.forEach{
 map = ["name":"Jack"]
 ```
 
-3. 类相关
+##### 类相关
 
 ```kotlin 
 class Foo {
@@ -269,8 +275,7 @@ fooOne['bar'] = 250
 fooOne.invokeMethod("printBar", null) // 250 
 fooOne."printBar"() // 250
 ```
-
-4. 常用API
+##### 常用API
 
 ```kotlin 
 listOne = [1, 2, 3, 4, 5, 6]
@@ -290,8 +295,7 @@ listTwo.forEach{
     print(it) // 2 4 6
 }
 ```
-
-5. 闭包
+##### 闭包
 
 ```kotlin 
 // 第一种写法
@@ -357,11 +361,10 @@ buildScripts({
 })
 // 闭包作为第一个参数 上面两个函数是等价的
 ```
+##### 任务
 
-6. 任务
-
-1. 我们可以利用gradle简单创建一个项目
-
+######  Gradle项目创建
+我们可以利用gradle简单创建一个项目
 ```kotlin 
 zfz:tmp zhangfengzhou$ mkdir wrapper-demo  // 在tmp目录下创建一个 wrapper-demo 的文件夹
 zfz:tmp zhangfengzhou$ cd wrapper-demo/  // 切换到 wrappper-demo 文件夹下
@@ -386,8 +389,8 @@ zfz:wrapper-demo zhangfengzhou$ tree .  // 查看wrapper-demo目录结构
 2 directories, 4 files
 ```
 
-2. 在根目录下创建build.gradle文件 build.gradle 是项目构建的脚本 
-
+###### build.gradle脚本
+在根目录下创建build.gradle文件 build.gradle 是项目构建的脚本 
 ```kotlin 
 zfz:wrapper-demo zhangfengzhou$ touch build.gradle // 创建build.gradle文件
 zfz:wrapper-demo zhangfengzhou$ tree . // 查看 wrapper-demo 的目录结构
@@ -414,17 +417,14 @@ vi build.gradle 进入编辑 build.gradle 模式
 
 同步下 我们就会看到 输出了 hello world 
 
-### 4. 认识项目和任务
+### 4. 项目和任务
 
-1. Gradle 的生命周期 [相关网址](https://docs.gradle.org/current/userguide/build_lifecycle.html#output_of_gradle_test_testboth) 
+#### Gradle 生命周期
+[相关网址](https://docs.gradle.org/current/userguide/build_lifecycle.html#output_of_gradle_test_testboth) 
 
-![image-20200303193857305](/Users/zhangfengzhou/Desktop/image-20200303193857305.png)
+![image-20200303225548245](./总结/images/image-20200303225548245.png)
 
-gradle 的生命止周期是分为三个部分 初始化阶段 配置阶段 和 执行阶段 
-
-整个执行顺序是在build.gradle文件中从上到下依次执行  初始化 阶段就是一些 打印 定义等执行
-
-配置阶段就是任务的配置阶段 就是任务Task的闭包代码被执行  执行阶段就是 执行指定的某个任务  例如 `./gradlew HelloWorld` 就是执行定义的HelloWord任务
+gradle 的生命止周期是分为三个部分 初始化阶段 配置阶段 和 执行阶段 整个执行顺序是在build.gradle文件中从上到下依次执行  初始化 阶段就是一些 打印 定义等执行 配置阶段就是任务的配置阶段 就是任务Task的闭包代码被执行  执行阶段就是 执行指定的某个任务  例如 `./gradlew HelloWorld` 就是执行定义的HelloWord任务
 
 ```kotlin 
 // 闭包是配置操作 对HelloWorld 这个任务进行配置 叫做config
@@ -448,9 +448,7 @@ task('HelloWorld') {
 // 上面两个操作是等价的 都是定义了一个名字为HelloWorld的任务
 ```
 
-Gradle 核心模型 是Project和Task 
-
-Project中一切无主的方法都是定义在Project上的
+Gradle 核心模型 是Project和Task ，Project中一切无主的方法都是定义在Project上的
 
 ```kotlin 
 for (int i =0; i< 10; i++){
@@ -496,10 +494,10 @@ task("first") {
 }
 ```
 
-2. Gradle 插件编写
+#### Gradle 插件编写
 
-1. 在build.gradle中编写插件
-
+##### 方法一
+在build.gradle中编写插件
 ```kotlin
 task("first") {
     // configure 的时候执行
@@ -549,8 +547,9 @@ apply([plugin:MyAweSomePlugin])
 // binary plugin 
 ```
 
-2. 在项目中编写插件 即在buildSrc 中创建插件
-   1. 如何在项目中引用第三库
+##### 方法二 
+在项目中编写插件 即在buildSrc 中创建插件
+1. 如何在项目中引用第三库
 
 ```kotlin 
 // 在build.gradle文件中创建 
@@ -574,7 +573,7 @@ class Main {
 }
 ```
 
-​        2. 如何在构建项目阶段引入第三方库 使用第三方API 注意：是Gradle构建阶段 
+2. 如何在构建项目阶段引入第三方库 使用第三方API 注意：是Gradle构建阶段 
 
 ```kotlin 
 // 如果需要在构建阶段需要第三方库的支持
@@ -599,8 +598,7 @@ if(StringUtils.isNoneBlank()){
 }
 
 ```
-
-​       3.  如何编写插件
+3. 如何在buildSrc中编写插件
 
 ```kotlin 
 1. 步骤一 创建 buildSrc目录
@@ -625,6 +623,7 @@ public class MyPlugin implements Plugin<Project> {
 
 3. 步骤三 .在build.gradle中引入插件
 apply plugin: MyPlugin
+引入插件之后，我们就可以在IDEAL的右侧Gradle控制面板中找到MyPlugin这个插件创建的10个Task, task0...task9
 ```
 
 ![屏幕快照 2020-03-03 下午8.54.35](./总结/images/image-20200303111200512.png)
@@ -772,9 +771,13 @@ apply plugin: MyAweSomePlugin
 //apply plugin: 'http://myserver.com/my-script'
 ```
 
-### 5. 学习网站地址
+## 5. 学习网站地址
 
-[Gradle在线学习地址](https://www.bilibili.com/video/av70568380?p=1)
+[Blibli的Gradle学习地址](https://www.bilibili.com/video/av70568380?p=1)
+
+[Gradle文档](https://docs.gradle.org/current/dsl/org.gradle.api.Project.html)
+
+
 
 
 
